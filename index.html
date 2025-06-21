@@ -50,6 +50,29 @@
     .highlight { font-weight: bold; border: 2px solid #007bff !important; }
     .highlight td { font-weight: bold; }
 </style>
+<style>
+.ticker-card {
+  margin: 20px auto;
+  padding: 10px 16px;
+  width: fit-content;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  color: #333;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+#cassavaArrow {
+  font-weight: bold;
+  font-size: 18px;
+}
+</style>
 </head>
 <body>
 <!-- Rest of the HTML remains unchanged -->
@@ -102,7 +125,7 @@
 <div id="creditScoreBlock">
 <h3>📊 Projected Credit Score: <span id="creditScoreValue">N/A</span> / 100</h3>
 </div>
-<p>Predicted Yield: <span id="predictedYieldDisplay">N/A</span> kg/hectare</p>
+<p>Predicted Yield: <span id="predictedYieldDisplay">N/A</span> kg/decare<p>
 <label><input id="consentCheckbox" type="checkbox"/> I consent to share data</label><br/>
 <button disabled id="initiateLoanBtn">Initiate Loan Process</button>
 <div id="borrowerLoanStatus">Loan Status: Not initiated</div>
@@ -151,7 +174,13 @@
 <canvas id="scatterChart" style="max-width:100%; height:300px;"></canvas>
 <canvas id="barChart" style="max-width:100%; height:300px;"></canvas>
 </div>
-<div id="lenderActions" style="display: none;">
+<div id="lenderActions" style="display: none;"
+<div id="cassavaTicker" class="ticker-card">
+  <span><strong>Cassava Market Price:</strong></span>
+  <span id="cassavaPriceValue">--</span>
+  <span>USD/ton</span>
+  <span id="cassavaArrow">↑</span>
+</div>
 <button onclick="updateLoanStatus('authorized')" style="background: #28a745;">Authorize</button>
 <button onclick="updateLoanStatus('rejected')" style="background: #dc3545;">Reject</button>
 </div>
@@ -221,7 +250,7 @@ async function loadCharts() {
         type: 'bar',
         data: {
             labels: data.months,
-            datasets: [{ label: 'Yield Prediction (kg/ha)', data: data.yields, backgroundColor: 'rgb(75, 192, 192)' }]
+            datasets: [{ label: 'Yield Prediction (kg/decare)', data: data.yields, backgroundColor: 'rgb(75, 192, 192)' }]
         },
         options: {
             responsive: true,
@@ -470,6 +499,29 @@ function drawCharts(data) {
             }
         }
     });
+
+
+let previousPrice = 280;
+
+function simulateCassavaPrice() {
+  const base = 280;
+  const volatility = 10;
+  const price = (base + (Math.random() * volatility - volatility / 2)).toFixed(2);
+
+  const priceEl = document.getElementById("cassavaPriceValue");
+  const arrowEl = document.getElementById("cassavaArrow");
+
+  priceEl.textContent = price;
+  arrowEl.textContent = price >= previousPrice ? "↑" : "↓";
+  arrowEl.style.color = price >= previousPrice ? "green" : "red";
+
+  previousPrice = price;
+}
+
+setInterval(simulateCassavaPrice, 5000);
+simulateCassavaPrice();
+
+
 }
 
 let contractABI = [
