@@ -60,7 +60,35 @@
 <button id="lenderTab" onclick="showTab('lender')" style="flex: 1; padding: 12px; background: #f0f0f0; color: black; border: none; font-weight: bold;">Lender Review</button>
 </div>
 <div id="borrowerPanel" style="display: block;">
-<button id="connectBtn">Connect Wallet</button>
+<div style="display: flex; align-items: center; gap: 10px; position: relative;">
+  <button id="connectBtn">Connect Wallet</button>
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#007bff" viewBox="0 0 16 16" style="cursor: pointer;" id="infoIcon">
+    <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm.93 4.588a.9.9 0 1 1-1.86 0 .9.9 0 0 1 1.86 0zM8 6.5a.5.5 0 0 1 .5.5v4.002a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5z"/>
+  </svg>
+  <div id="tooltipText" style="display: none; position: absolute; top: 35px; left: 120px; background: #f8f9fa; border: 1px solid #ccc; padding: 8px 12px; border-radius: 8px; font-size: 14px; color: #333; max-width: 320px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 1000;">
+    <strong>To test this demo:</strong><br>
+    1. Install MetaMask<br>
+    2. Create Wallet<br>
+    3. Switch to the Sepolia test network<br>
+    4. Get free Sepolia ETH from:<br>
+    <a href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia" target="_blank">Google Cloud Faucet</a>
+  </div>
+</div>
+
+<script>
+  document.getElementById('infoIcon').addEventListener('click', function () {
+    const tooltip = document.getElementById('tooltipText');
+    tooltip.style.display = tooltip.style.display === 'none' ? 'block' : 'none';
+  });
+
+  document.addEventListener('click', function (event) {
+    const tooltip = document.getElementById('tooltipText');
+    const icon = document.getElementById('infoIcon');
+    if (!icon.contains(event.target) && !tooltip.contains(event.target)) {
+      tooltip.style.display = 'none';
+    }
+  });
+</script>
 <div id="borrowerWalletStatus">Wallet Status: Not Connected</div>
 <div id="borrowerNotification" class="notification" style="display: none;"></div>
 <div id="overviewPrompt">Your Farm Performance Overview</div>
@@ -734,7 +762,7 @@ async function triggerSmartContract() {
         const txHash = receipt.transactionHash;
         document.getElementById('txStatus').innerHTML = `
             ✅ Transaction sent!<br>
-            Hash: <code>${txHash}</code><br>
+            Hash:<br><input type="text" value="${txHash}" readonly style="width:100%; font-family: monospace; margin-top: 4px;">
             <a href='https://sepolia.etherscan.io/tx/${txHash}' target='_blank'>View on Etherscan</a>
         `;
         triggerBtn.style.display = 'none';
