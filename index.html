@@ -132,7 +132,32 @@
 <div id="releaseFundsSection" style="display:none;">
 <label>Smart Contract Address:</label>
 <input id="contractAddress" placeholder="Contract address" type="text" readonly/>
-<button id="triggerContractBtn" style="display:none;">Trigger Smart Contract</button>
+<div style="display: flex; align-items: center; gap: 10px; position: relative;">
+  <button id="triggerContractBtn">Trigger Smart Contract</button>
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#007bff" viewBox="0 0 16 16" style="cursor: pointer;" id="gasInfoIcon">
+    <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm.93 4.588a.9.9 0 1 1-1.86 0 .9.9 0 0 1 1.86 0zM8 6.5a.5.5 0 0 1 .5.5v4.002a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5z"/>
+  </svg>
+  <div id="gasTooltip" style="display: none; position: absolute; top: 35px; left: 180px; background: #f8f9fa; border: 1px solid #ccc; padding: 8px 12px; border-radius: 8px; font-size: 14px; color: #333; max-width: 300px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 1000;">
+    <strong>Note:</strong><br>
+    Triggering the smart contract on Sepolia incurs a small gas fee.<br>
+    Ensure your wallet has sufficient Sepolia ETH.
+  </div>
+</div>
+
+<script>
+  document.getElementById('gasInfoIcon').addEventListener('click', function () {
+    const tooltip = document.getElementById('gasTooltip');
+    tooltip.style.display = tooltip.style.display === 'none' ? 'block' : 'none';
+  });
+
+  document.addEventListener('click', function (event) {
+    const tooltip = document.getElementById('gasTooltip');
+    const icon = document.getElementById('gasInfoIcon');
+    if (!icon.contains(event.target) && !tooltip.contains(event.target)) {
+      tooltip.style.display = 'none';
+    }
+  });
+</script>
 <div id="txStatus" style="margin-top:10px; font-size:14px;"></div>
 </div>
 <div id="endScreen">
@@ -174,7 +199,7 @@
 <canvas id="scatterChart" style="max-width:100%; height:300px;"></canvas>
 <canvas id="barChart" style="max-width:100%; height:300px;"></canvas>
 </div>
-<div id="lenderActions" style="display: none;"
+<div id="lenderActions" style="display: none;">
 <div id="cassavaTicker" class="ticker-card">
   <span><strong>Cassava Market Price:</strong></span>
   <span id="cassavaPriceValue">--</span>
