@@ -74,8 +74,7 @@ Traditional credit systems fail in environments where financial data is incomple
 ## 📬 Contact
 
 > Built by **Alis Grave Nil**  
-> For inquiries: `agn-support@example.com`  
-> Mock contact: `+27 83 123 4567`
+> For inquiries: `alizgravenil@gmail.com` 
 
 ---
 
