@@ -50,6 +50,43 @@
     #endScreen { display: none; text-align: center; margin-top: 20px; }
     .highlight { font-weight: bold; border: 2px solid #007bff !important; }
     .highlight td { font-weight: bold; }
+    .info-box {
+  background-color: #e7f3ff;
+  color: #084298;
+  padding: 10px 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  font-size: 15px;
+    }
+    .status-box {
+  padding: 10px 15px;
+  margin-top: 10px;
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: bold;
+  color: white;
+}
+
+.status-authorized {
+  background-color: #d4edda; /* pale green */
+  color: #155724;            /* dark green text */
+}
+
+.status-rejected {
+  background-color: #f8d7da; /* pale red */
+  color: #721c24;            /* dark red text */
+}
+
+.status-pending {
+  background-color: #fff3cd; /* pale yellow */
+  color: #856404;            /* dark yellow text */
+}
+
+.status-neutral {
+  background-color: #e2e3e5; /* pale gray */
+  color: #383d41;            /* dark gray text */
+}
+
 </style>
 <style>
 .ticker-card {
@@ -126,10 +163,15 @@
 <div id="creditScoreBlock">
 <h3>📊 Projected Credit Score: <span id="creditScoreValue">N/A</span> / 100</h3>
 </div>
-<p>Predicted Yield: <span id="predictedYieldDisplay">N/A</span> kg/decare<p>
+<div id="yieldInfoBox" class="info-box" style="display:none;">
+  Threshold: <span id="yieldThresholdValue">1490</span>,
+  Predicted Yield: <span id="predictedYieldDisplay">N/A</span> kg/daa
+</div>
 <label><input id="consentCheckbox" type="checkbox"/> I consent to share data</label><br/>
 <button disabled id="initiateLoanBtn">Initiate Loan Process</button>
-<div id="borrowerLoanStatus">Loan Status: Not initiated</div>
+<div id="borrowerLoanStatus" class="status-box status-neutral" style="display:none;">
+  Loan Status: <span id="loanStatusText">Not initiated</span>
+</div>
 <button id="reloadDemoBtn" style="display: none;">Reload Demo</button>
 <div id="releaseFundsSection" style="display:none;">
 <label>Smart Contract Address:</label>
@@ -217,7 +259,7 @@
 <script>
 let web3;
 let currentBorrowerAddress = null;
-let currentLoanStatus = 'not_initiated';
+let currentLoanStatus = 'Not Initiated';
 
 async function connectWallet() {
     const status = document.getElementById('borrowerWalletStatus');
@@ -254,6 +296,7 @@ async function loadCharts() {
     const res = await fetch('/get_simulated_farm_data');
     const data = await res.json();
     document.getElementById('predictedYieldDisplay').innerText = data.predicted_yield;
+    document.getElementById('yieldThresholdValue').innerText = data.threshold || '1490';
 
     const avgYield = data.yields.reduce((a, b) => a + b, 0) / data.yields.length;
     const creditScore = Math.min(Math.round(avgYield / 20), 100);
@@ -287,6 +330,7 @@ async function loadCharts() {
     });
 
     document.getElementById('initiateLoanBtn').onclick = initiateLoanRequest;
+    document.getElementById('yieldInfoBox').style.display = 'block';
 }
 
 async function initiateLoanRequest() {
@@ -361,7 +405,28 @@ async function updateLoanStatusUI() {
     const contractAddressInput = document.getElementById('contractAddress');
     const releaseFundsSection = document.getElementById('releaseFundsSection');
 
-    loanStatus.innerText = `Loan Status: ${data.status.charAt(0).toUpperCase() + data.status.slice(1)}`;
+    const loanStatusBox = document.getElementById('borrowerLoanStatus');
+const loanStatusText = document.getElementById('loanStatusText');
+
+loanStatusBox.className = 'status-box'; // reset classes
+
+if (data.status === 'pending') {
+  loanStatusText.innerText = 'Pending';
+  loanStatusBox.classList.add('status-pending');
+  loanStatusBox.style.display = 'block';
+} else if (data.status === 'authorized') {
+  loanStatusText.innerText = 'Authorized';
+  loanStatusBox.classList.add('status-authorized');
+  loanStatusBox.style.display = 'block';
+} else if (data.status === 'rejected') {
+  loanStatusText.innerText = 'Rejected';
+  loanStatusBox.classList.add('status-rejected');
+  loanStatusBox.style.display = 'block';
+} else {
+  loanStatusText.innerText = 'Not initiated';
+  loanStatusBox.classList.add('status-neutral');
+  loanStatusBox.style.display = 'block';
+}
     releaseFundsSection.style.display = data.status === 'authorized' ? 'block' : 'none';
     triggerBtn.style.display = data.status === 'authorized' ? 'block' : 'none';
     contractAddressInput.value = data.contractAddress || '';
