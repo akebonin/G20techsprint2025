@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<title>Credit Asset Demo</title>
+<title>IDEL</title>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -36,6 +36,7 @@
       word-break: break-word; max-width: 100%;
     }
     h3 { margin-top: 30px; }
+    h1 { text-align: center; font-style: bold; font-size: 1.5em; }
     #chartsContainer, #-creditScoreBlock { display: none; }
     #overviewPrompt { font-style: italic; font-size: 1.1em; color: #666; margin: 30px 0; text-align: center; }
     #federatedTableContainer { overflow-x: auto; width: 100%; }
@@ -77,7 +78,7 @@
 <body>
 <!-- Rest of the HTML remains unchanged -->
 <div class="container">
-<h1>G20 TechSprint 2025: Credit Asset Demo</h1>
+<h1>IDEL – Inclusive Digital Ecosystem for Lending</h1>
 <div style="display: flex; justify-content: space-between; margin: 20px 0; border-radius: 8px; overflow: hidden">
 <button id="borrowerTab" onclick="showTab('borrower')" style="flex: 1; padding: 12px; background: #007bff; color: white; border: none; font-weight: bold;">Borrower Dashboard</button>
 <button id="lenderTab" onclick="showTab('lender')" style="flex: 1; padding: 12px; background: #f0f0f0; color: black; border: none; font-weight: bold;">Lender Review</button>
@@ -203,7 +204,7 @@
 <div id="cassavaTicker" class="ticker-card">
   <span><strong>Cassava Market Price:</strong></span>
   <span id="cassavaPriceValue">--</span>
-  <span>USD/ton</span>
+  <span>USD/MT</span>
   <span id="cassavaArrow">↑</span>
 </div>
 <button onclick="updateLoanStatus('authorized')" style="background: #28a745;">Authorize</button>
@@ -211,7 +212,7 @@
 </div>
 </div>
 </div>
-<footer>Built by Alis Grave Nil</footer>
+<footer>G20 TechSprint 2025 Demo | Built by Alis Grave Nil</footer>
 <script>
 let web3;
 let currentBorrowerAddress = null;
