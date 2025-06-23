@@ -130,6 +130,7 @@
 <label><input id="consentCheckbox" type="checkbox"/> I consent to share data</label><br/>
 <button disabled id="initiateLoanBtn">Initiate Loan Process</button>
 <div id="borrowerLoanStatus">Loan Status: Not initiated</div>
+<button id="reloadDemoBtn" style="display: none;">Reload Demo</button>
 <div id="releaseFundsSection" style="display:none;">
 <label>Smart Contract Address:</label>
 <input id="contractAddress" placeholder="Contract address" type="text" readonly/>
@@ -165,7 +166,7 @@
 <h3>Loan Process Completed</h3>
 <p>For setting up the next disbursement, contact our representative at:</p>
 <p>Phone: +27 123 456 7890 | Email: contact@creditassetdemo.co.za</p>
-<button id="reloadDemoBtn">Reload Demo</button>
+<button id="TXreloadDemoBtn">Reload Demo</button>
 </div>
 </div>
 <div id="lenderPanel" style="display: none;">
@@ -331,6 +332,7 @@ async function updateLoanStatus(status) {
         body: JSON.stringify({ borrowerAddress: currentBorrowerAddress, status })
     });
     const data = await res.json();
+    document.getElementById('reloadDemoBtn').style.display = 'none';
     if (data.success) {
         currentLoanStatus = status;
         showNotification('lender', status === 'authorized' ? 'success' : 'error',
@@ -370,6 +372,8 @@ async function updateLoanStatusUI() {
         showNotification('borrower', 'success', 'Loan process has been authorized.');
     } else if (data.status === 'rejected') {
         showNotification('borrower', 'error', 'Loan process has been rejected.');
+
+    document.getElementById('reloadDemoBtn').style.display = 'inline-block';
     } else {
         document.getElementById('borrowerNotification').style.display = 'none';
     }
@@ -865,6 +869,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("reloadDemoBtn").addEventListener("click", () => {
         window.location.reload();
     });
+    document.getElementById("TXreloadDemoBtn").addEventListener("click", () => {
+    window.location.reload();
+});
 });
 </script>
 </body>
